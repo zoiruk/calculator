@@ -63,7 +63,7 @@
         }
 
         .header {
-            margin-bottom: 32px;
+            margin-bottom: 20px;
             text-align: center;
         }
 
@@ -80,7 +80,7 @@
             background: var(--container-bg);
             border-radius: var(--zoir-radius);
             padding: 16px;
-            margin-bottom: 20px;
+            margin-bottom: 16px;
             box-shadow: var(--zoir-shadow);
             /* Легкая тень */
         }
@@ -129,8 +129,8 @@
 
         .rate-info {
             background: var(--container-bg);
-            margin: 24px 0;
-            padding: 16px;
+            margin: 16px 0;
+            padding: 14px;
             font-size: 0.95rem;
             color: var(--text-color);
             text-align: center;
@@ -175,6 +175,36 @@
             line-height: 1.6;
             color: var(--hint-color);
             font-weight: 400;
+        }
+
+        /* QUICK CHIPS STYLES */
+        .quick-chips {
+            display: flex;
+            gap: 8px;
+            margin-top: 12px;
+            overflow-x: auto;
+            padding-bottom: 4px;
+        }
+        
+        .quick-chips::-webkit-scrollbar {
+            display: none;
+        }
+
+        .chip {
+            background: rgba(51, 144, 236, 0.08);
+            color: var(--link-color);
+            padding: 6px 14px;
+            border-radius: 12px;
+            font-size: 13px;
+            font-weight: 600;
+            white-space: nowrap;
+            cursor: pointer;
+            border: 1px solid rgba(51, 144, 236, 0.15);
+        }
+
+        .chip:active {
+            transform: scale(0.95);
+            background: rgba(51, 144, 236, 0.15);
         }
 
         /* Pulse Animation for Calculation Result */
@@ -353,12 +383,18 @@
                 <input type="text" id="from" value="100" placeholder="Masalan: 100" inputmode="decimal">
                 <span class="currency">GBP</span>
             </div>
+            <div class="quick-chips">
+                <div class="chip" onclick="setAmount('from', 50)">£50</div>
+                <div class="chip" onclick="setAmount('from', 100)">£100</div>
+                <div class="chip" onclick="setAmount('from', 500)">£500</div>
+                <div class="chip" onclick="setAmount('from', 1000)">£1000</div>
+            </div>
         </div>
 
         <div class="form-group">
             <span class="label">🤝 Qabul qiluvchi oladi (UZS)</span>
-            <div class="input-box" style="opacity: 0.8;">
-                <input type="text" id="to" readonly value="...">
+            <div class="input-box" id="to-box">
+                <input type="text" id="to" value="..." placeholder="Masalan: 1 000 000" inputmode="numeric">
                 <span class="currency">UZS</span>
             </div>
         </div>
@@ -400,6 +436,8 @@
 
     <script>
         let currentRate = 0;
+        let lastEdited = 'from';
+
         const fromInput = document.getElementById('from');
         const toInput = document.getElementById('to');
         const rateDisplay = document.getElementById('rate');
@@ -408,40 +446,64 @@
         const formatTotal = (n) => new Intl.NumberFormat('ru-RU', { maximumFractionDigits: 0 }).format(n);
         const formatRate = (n) => new Intl.NumberFormat('ru-RU', { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(n);
 
+        window.setAmount = function(type, val) {
+            lastEdited = type;
+            if (type === 'from') {
+                fromInput.value = val;
+                toInput.value = '...';
+            } else {
+                toInput.value = formatTotal(val);
+                fromInput.value = '...';
+            }
+            if (window.Telegram && window.Telegram.WebApp) {
+                window.Telegram.WebApp.HapticFeedback.impactOccurred('light');
+            }
+            calculate();
+        };
+
         function calculate() {
             if (!currentRate) return;
 
-            let val = fromInput.value.trim();
+            let sourceInput = lastEdited === 'from' ? fromInput : toInput;
+            let targetInput = lastEdited === 'from' ? toInput : fromInput;
+
+            let val = sourceInput.value.trim();
             if (val === "") {
-                toInput.value = '...';
+                targetInput.value = '...';
                 return;
             }
 
             // Анимация и креативный текст
-            toInput.value = 'Hisoblanmoqda...';
-            toInput.parentElement.style.opacity = '0.5';
+            targetInput.value = '⏳...';
+            targetInput.parentElement.style.opacity = '0.5';
             calcBtn.disabled = true;
             calcBtn.innerText = '⌛ Tayyorlanmoqda...';
 
             setTimeout(() => {
-                let rawVal = fromInput.value.trim().replace(',', '.');
+                let rawVal = sourceInput.value.trim().replace(/\s/g, '').replace(',', '.');
                 let amount = parseFloat(rawVal || 0);
                 if (isNaN(amount) || amount < 0) amount = 0;
 
-                const result = amount * currentRate;
+                let result;
+                if (lastEdited === 'from') {
+                    result = amount * currentRate;
+                    targetInput.value = formatTotal(result);
+                } else {
+                    result = amount / currentRate;
+                    targetInput.value = new Intl.NumberFormat('ru-RU', { maximumFractionDigits: 2 }).format(result);
+                }
 
-                toInput.value = formatTotal(result);
-                toInput.parentElement.style.opacity = '1';
-                toInput.parentElement.classList.add('pulse-anim');
+                targetInput.parentElement.style.opacity = '1';
+                targetInput.parentElement.classList.add('pulse-anim');
 
                 calcBtn.disabled = false;
                 calcBtn.innerText = '🧮 Hisoblash';
 
                 // Убираем класс анимации через полсекунды
                 setTimeout(() => {
-                    toInput.parentElement.classList.remove('pulse-anim');
+                    targetInput.parentElement.classList.remove('pulse-anim');
                 }, 500);
-            }, 600);
+            }, 500);
         }
 
         function showApp() {
@@ -544,7 +606,7 @@
             }
         });
 
-        // Также оставляем расчет при нажатии Enter в поле ввода
+        // Расчет при нажатии Enter в полях ввода
         fromInput.addEventListener('keypress', (e) => {
             if (e.key === 'Enter') {
                 calculate();
@@ -552,9 +614,22 @@
             }
         });
 
-        // Сброс результата при изменении суммы (провоцирует нажатие на кнопку Расчета)
+        toInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                calculate();
+                toInput.blur();
+            }
+        });
+
+        // Сброс противоположного результата при изменении суммы (провоцирует нажатие на кнопку Расчета)
         fromInput.addEventListener('input', () => {
+            lastEdited = 'from';
             toInput.value = '...';
+        });
+
+        toInput.addEventListener('input', () => {
+             lastEdited = 'to';
+             fromInput.value = '...';
         });
 
         init();
