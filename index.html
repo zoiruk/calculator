@@ -6,20 +6,29 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Mavsumiy Ishchilar Jamoasi | TransferGo</title>
     <style>
-        /* Telegram Native Theme Sync */
+        /* Telegram Native Theme Sync & Zoir Design Standard */
         :root {
-            --bg-color: var(--tg-theme-bg-color, #ffffff);
-            --text-color: var(--tg-theme-text-color, #000000);
-            --hint-color: var(--tg-theme-hint-color, #707579);
+            --bg-color: var(--tg-theme-secondary-bg-color, #f3f4f6);
+            /* Светло-серый фон приложения */
+            --container-bg: var(--tg-theme-bg-color, #ffffff);
+            /* Чисто белый фон контейнеров */
+            --text-color: var(--tg-theme-text-color, #111827);
+            /* Почти черный текст */
+            --hint-color: #6b7280;
+            /* Светло-серый для второстепенного текста */
             --link-color: var(--tg-theme-link-color, #3390ec);
             --btn-color: var(--tg-theme-button-color, #3390ec);
             --btn-text-color: var(--tg-theme-button-text-color, #ffffff);
-            --secondary-bg: var(--tg-theme-secondary-bg-color, #f4f4f5);
+            --zoir-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            --zoir-radius: 16px;
+            /* Золотой стандарт скругления */
         }
 
         * {
             box-sizing: border-box;
             -webkit-tap-highlight-color: transparent;
+            transition: all 0.2s ease;
+            /* Плавность всех переходов */
         }
 
         body {
@@ -31,52 +40,70 @@
             display: flex;
             flex-direction: column;
             min-height: 100vh;
+            line-height: 1.5;
         }
 
         /* Top Partnership Banner */
         .banner {
-            background-color: var(--secondary-bg);
+            background-color: var(--container-bg);
             padding: 12px 16px;
             font-size: 13px;
             text-align: center;
-            border-bottom: 0.5px solid var(--hint-color);
-            opacity: 0.9;
+            border-bottom: 0.5px solid rgba(0, 0, 0, 0.05);
+            font-weight: 500;
         }
 
         .container {
-            padding: 16px;
+            padding: 20px 16px;
             flex-grow: 1;
+            max-width: 500px;
+            margin: 0 auto;
+            width: 100%;
         }
 
         .header {
-            margin-bottom: 24px;
+            margin-bottom: 32px;
             text-align: center;
         }
 
         .title {
-            font-size: 20px;
+            font-size: 1.3rem;
+            /* Zoir Typography: 1.3rem */
             font-weight: 700;
             margin: 0;
+            letter-spacing: -0.01em;
         }
 
         /* Native List Styling */
         .form-group {
+            background: var(--container-bg);
+            border-radius: var(--zoir-radius);
+            padding: 16px;
             margin-bottom: 20px;
+            box-shadow: var(--zoir-shadow);
+            /* Легкая тень */
         }
 
         .label {
-            font-size: 14px;
-            color: var(--link-color);
+            font-size: 0.9rem;
+            /* Zoir Typography: 0.9rem */
+            color: var(--hint-color);
+            /* Второстепенный текст */
             font-weight: 600;
-            margin-bottom: 8px;
+            margin-bottom: 12px;
             display: block;
-            padding-left: 4px;
+            padding-left: 2px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
         }
 
         .input-box {
-            background: var(--secondary-bg);
-            border: none;
+            background: var(--bg-color);
+            /* Смена контраста для инпута */
+            border: 1px solid rgba(0, 0, 0, 0.03);
             border-radius: 12px;
+            /* Инпуты внутри карточки чуть меньше скруглены */
             padding: 14px 16px;
             display: flex;
             align-items: center;
@@ -88,8 +115,8 @@
             border: none;
             outline: none;
             color: var(--text-color);
-            font-size: 18px;
-            font-weight: 600;
+            font-size: 1.1rem;
+            font-weight: 700;
             width: 100%;
         }
 
@@ -100,12 +127,15 @@
         }
 
         .rate-info {
-            margin: 16px 0;
-            padding: 12px;
-            font-size: 14px;
-            color: var(--hint-color);
+            background: var(--container-bg);
+            margin: 24px 0;
+            padding: 16px;
+            font-size: 0.95rem;
+            color: var(--text-color);
             text-align: center;
-            border-top: 0.5px solid var(--secondary-bg);
+            border-radius: var(--zoir-radius);
+            box-shadow: var(--zoir-shadow);
+            font-weight: 500;
         }
 
         .btn {
@@ -113,34 +143,130 @@
             color: var(--btn-text-color);
             width: 100%;
             border: none;
-            border-radius: 12px;
-            padding: 16px;
+            border-radius: var(--zoir-radius);
+            padding: 18px;
             font-size: 16px;
             font-weight: 700;
             cursor: pointer;
-            transition: opacity 0.2s;
+            box-shadow: 0 4px 12px rgba(51, 144, 236, 0.2);
             text-decoration: none;
             display: block;
             text-align: center;
-            margin-top: 10px;
+            margin-top: 12px;
         }
 
         .btn:active {
-            opacity: 0.7;
+            transform: scale(0.98);
+            /* Тактильное сжатие при клике */
+            opacity: 0.9;
         }
 
         footer {
             padding: 24px 16px;
             text-align: center;
-            font-size: 12px;
+            font-size: 0.85rem;
+            /* Zoir Typography: 0.85rem */
             color: var(--hint-color);
         }
 
         .team-note {
             margin-bottom: 12px;
-            line-height: 1.5;
-            color: var(--text-color);
-            font-weight: 500;
+            line-height: 1.6;
+            color: var(--hint-color);
+            font-weight: 400;
+        }
+
+        /* Pulse Animation for Calculation Result */
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.01);
+            }
+
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        .pulse-anim {
+            animation: pulse 0.4s ease-out;
+            background: var(--link-color) !important;
+            color: white !important;
+        }
+
+        .pulse-anim input {
+            color: white !important;
+        }
+
+        /* Shimmer Effect */
+        .shimmer {
+            background: rgba(0, 0, 0, 0.05);
+            background-image: linear-gradient(to right, rgba(0, 0, 0, 0.05) 0%, rgba(0, 0, 0, 0.1) 20%, rgba(0, 0, 0, 0.05) 40%, rgba(0, 0, 0, 0.05) 100%);
+            background-repeat: no-repeat;
+            background-size: 800px 104px;
+            display: inline-block;
+            position: relative;
+            animation: shimmer 1.5s linear infinite forwards;
+            border-radius: 4px;
+            width: 80px;
+            height: 18px;
+            vertical-align: middle;
+        }
+
+        @keyframes shimmer {
+            0% {
+                background-position: -468px 0;
+            }
+
+            100% {
+                background-position: 468px 0;
+            }
+        }
+
+        /* Live Indicator */
+        .live-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            background: rgba(34, 197, 94, 0.1);
+            color: #16a34a;
+            padding: 2px 8px;
+            border-radius: 20px;
+            font-size: 10px;
+            font-weight: 700;
+            text-transform: uppercase;
+            margin-left: 8px;
+            vertical-align: middle;
+            border: 1px solid rgba(34, 197, 94, 0.1);
+        }
+
+        .live-dot {
+            width: 6px;
+            height: 6px;
+            background-color: #22c55e;
+            border-radius: 50%;
+            display: inline-block;
+            animation: pulse-dot 2s infinite;
+        }
+
+        @keyframes pulse-dot {
+            0% {
+                transform: scale(0.95);
+                box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.5);
+            }
+
+            70% {
+                transform: scale(1);
+                box-shadow: 0 0 0 5px rgba(34, 197, 94, 0);
+            }
+
+            100% {
+                transform: scale(0.95);
+                box-shadow: 0 0 0 0 rgba(34, 197, 94, 0);
+            }
         }
     </style>
 </head>
@@ -151,33 +277,42 @@
         🤝 <b>Mavsumiy Ishchilar Jamoasi</b> va <b>TransferGo</b> hamkorligi
     </div>
 
-    <div class="container">
+    <div class="container" id="main-container">
         <div class="header">
-            <h1 class="title">Valyuta Hisoblagichi</h1>
+            <h1 class="title">🧮 Valyuta Hisoblagichi</h1>
         </div>
 
         <div class="form-group">
-            <span class="label">Siz yuborasiz (GBP)</span>
+            <span class="label">💰 Siz yuborasiz (GBP)</span>
             <div class="input-box">
-                <input type="number" id="from" value="100" inputmode="decimal">
+                <input type="text" id="from" value="100" placeholder="Masalan: 100" inputmode="decimal">
                 <span class="currency">GBP</span>
             </div>
         </div>
 
         <div class="form-group">
-            <span class="label">Qabul qiluvchi oladi (UZS)</span>
+            <span class="label">🤝 Qabul qiluvchi oladi (UZS)</span>
             <div class="input-box" style="opacity: 0.8;">
                 <input type="text" id="to" readonly value="...">
                 <span class="currency">UZS</span>
             </div>
         </div>
 
-        <div class="rate-info">
-            1 GBP ≈ <span id="rate">...</span> UZS
+        <div class="rate-info" id="rate-card">
+            <span id="rate-loading"><span class="shimmer"></span></span>
+            <span id="rate-content" style="display: none;">
+                ⏱️ 1 GBP ≈ <span id="rate">...</span> UZS
+                <span class="live-badge"><span class="live-dot"></span> LIVE</span>
+            </span>
         </div>
 
+        <button class="btn" id="calcBtn"
+            style="background-color: var(--container-bg); color: var(--text-color); margin-bottom: 12px; box-shadow: none; border: 1px solid rgba(0,0,0,0.05);">
+            🧮 Hisoblash
+        </button>
+
         <a href="https://trgo.co/en/r/VFeJV7?utm_source=7" class="btn" id="goBtn">
-            Transferni Boshlash
+            📲 Pul Yuborishni Boshlang
         </a>
     </div>
 
@@ -193,46 +328,160 @@
         const fromInput = document.getElementById('from');
         const toInput = document.getElementById('to');
         const rateDisplay = document.getElementById('rate');
+        const calcBtn = document.getElementById('calcBtn');
 
-        const format = (n) => new Intl.NumberFormat('ru-RU', { maximumFractionDigits: 0 }).format(n);
+        const formatTotal = (n) => new Intl.NumberFormat('ru-RU', { maximumFractionDigits: 0 }).format(n);
+        const formatRate = (n) => new Intl.NumberFormat('ru-RU', { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(n);
 
         function calculate() {
             if (!currentRate) return;
-            const result = parseFloat(fromInput.value || 0) * currentRate;
-            toInput.value = format(result);
+
+            let val = fromInput.value.trim();
+            if (val === "") {
+                toInput.value = '...';
+                return;
+            }
+
+            // Анимация и креативный текст
+            toInput.value = 'Hisoblanmoqda...';
+            toInput.parentElement.style.opacity = '0.5';
+            calcBtn.disabled = true;
+            calcBtn.innerText = '⌛ Tayyorlanmoqda...';
+
+            setTimeout(() => {
+                let rawVal = fromInput.value.trim().replace(',', '.');
+                let amount = parseFloat(rawVal || 0);
+                if (isNaN(amount) || amount < 0) amount = 0;
+                
+                const result = amount * currentRate;
+
+                toInput.value = formatTotal(result);
+                toInput.parentElement.style.opacity = '1';
+                toInput.parentElement.classList.add('pulse-anim');
+
+                calcBtn.disabled = false;
+                calcBtn.innerText = '🧮 Hisoblash';
+
+                // Убираем класс анимации через полсекунды
+                setTimeout(() => {
+                    toInput.parentElement.classList.remove('pulse-anim');
+                }, 500);
+            }, 600);
+        }
+
+        function showApp() {
+            const container = document.getElementById('main-container');
+            // Плавное появление контейнера
+            container.style.opacity = '1';
+            container.style.transform = 'translateY(0)';
+        }
+
+        function animateRate(endValue) {
+            const startValue = endValue - 200; // Начинаем чуть ниже для эффекта прокрутки
+            const duration = 1200;
+            const startTime = performance.now();
+
+            function update(currentTime) {
+                const elapsed = currentTime - startTime;
+                const progress = Math.min(elapsed / duration, 1);
+
+                // Ease out cubic function
+                const easeOut = 1 - Math.pow(1 - progress, 3);
+                const current = startValue + (endValue - startValue) * easeOut;
+
+                rateDisplay.innerText = formatRate(current);
+
+                if (progress < 1) {
+                    requestAnimationFrame(update);
+                } else {
+                    rateDisplay.innerText = formatRate(endValue);
+                }
+            }
+            requestAnimationFrame(update);
+        }
+
+        function updateRateOnUI(rate) {
+            if (rate === "ERROR") {
+                const loadingSpan = document.getElementById('rate-loading');
+                loadingSpan.innerHTML = `☕ <b>Server biroz qahva ichyapti...</b><br><small style="color: #6b7280; font-size: 0.8rem;">Iltimos, bir necha daqiqadan so'ng urinib ko'ring! 🤝</small>`;
+                loadingSpan.style.color = '#e53935';
+                calcBtn.disabled = true;
+                calcBtn.style.opacity = '0.5';
+                return;
+            }
+
+            currentRate = parseFloat(rate);
+            if (isNaN(currentRate) || currentRate <= 0) {
+                currentRate = 16350; // Fallback so UI doesn't hang
+            }
+
+            document.getElementById('rate-loading').style.display = 'none';
+            document.getElementById('rate-content').style.display = 'inline';
+
+            // Анимация счетчика курса
+            animateRate(currentRate);
+
+            // Расчет суммы
+            setTimeout(calculate, 200);
         }
 
         function init() {
-            // ВАЖНО: Вставьте сюда актуальную ссылку после "New Deployment" в Google Apps Script!
+            // Подготовка начального состояния анимации
+            const container = document.getElementById('main-container');
+            container.style.opacity = '0';
+            container.style.transform = 'translateY(20px)';
+            container.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+
+            // Показываем оболочку приложения сразу, не дожидаясь API
+            setTimeout(showApp, 100);
+
+            // Параллельно запрашиваем курс
             const API_URL = 'https://script.google.com/macros/s/AKfycbxA-MxB5jM9mvGFzRLu7MPIyl-FAijyPqOreO3uwovHiK95Zeur1P4jtGyp8bCrR8pW0Q/exec?action=getRate';
 
             if (typeof google !== 'undefined' && google.script && google.script.run) {
-                // Работает внутри Google (GAS Web App)
-                google.script.run.withSuccessHandler(r => {
-                    currentRate = parseFloat(r);
-                    rateDisplay.innerText = format(currentRate);
-                    calculate();
-                }).getLatestRateForWebApp();
+                google.script.run
+                    .withSuccessHandler(r => {
+                        updateRateOnUI(r);
+                    })
+                    .withFailureHandler(err => {
+                        console.error("GAS Xatosi:", err);
+                        updateRateOnUI("ERROR");
+                    })
+                    .getLatestRateForWebApp();
             } else {
-                // Работает снаружи (GitHub Pages) через Fetch
                 fetch(API_URL)
                     .then(response => response.text())
                     .then(r => {
-                        currentRate = parseFloat(r);
-                        rateDisplay.innerText = format(currentRate);
-                        calculate();
+                        updateRateOnUI(r);
                     })
                     .catch(err => {
-                        console.error("Ошибка получения курса:", err);
-                        // Резервный вариант, если API недоступно
-                        currentRate = 16350;
-                        rateDisplay.innerText = format(currentRate);
-                        calculate();
+                        console.error("Kurs olishda xato:", err);
+                        updateRateOnUI(16350); // Fallback
                     });
             }
         }
 
-        fromInput.addEventListener('input', calculate);
+        // Привязываем расчет к кнопке
+        calcBtn.addEventListener('click', () => {
+            calculate();
+            if (window.Telegram && window.Telegram.WebApp) {
+                window.Telegram.WebApp.HapticFeedback.impactOccurred('light');
+            }
+        });
+
+        // Также оставляем расчет при нажатии Enter в поле ввода
+        fromInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                calculate();
+                fromInput.blur();
+            }
+        });
+
+        // Сброс результата при изменении суммы (провоцирует нажатие на кнопку Расчета)
+        fromInput.addEventListener('input', () => {
+            toInput.value = '...';
+        });
+
         init();
 
         // Telegram Native Features
