@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Mavsumiy Ishchilar Jamoasi | TransferGo</title>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
         /* Telegram Native Theme Sync & Zoir Design Standard */
         :root {
@@ -561,15 +562,30 @@
         // Telegram Native Features
         if (window.Telegram && window.Telegram.WebApp) {
             const tg = window.Telegram.WebApp;
-            tg.expand();
-            tg.ready();
+            
+            // Если приложение запущено внутри Telegram (на любой поддерживаемой платформе)
+            if (tg.platform && tg.platform !== 'unknown') {
+                tg.expand();
+                tg.ready();
 
-            // Match theme automatically
-            document.body.style.backgroundColor = tg.backgroundColor;
+                // Match theme automatically
+                if (tg.backgroundColor) {
+                    document.body.style.backgroundColor = tg.backgroundColor;
+                }
 
-            document.getElementById('goBtn').addEventListener('click', () => {
-                tg.HapticFeedback.impactOccurred('medium');
-            });
+                document.getElementById('goBtn').addEventListener('click', (e) => {
+                    e.preventDefault(); // Если внутри Telegram, запрещаем стандартный переход
+                    if (tg.HapticFeedback) {
+                        tg.HapticFeedback.impactOccurred('medium');
+                    }
+                    tg.openLink('https://trgo.co/en/r/VFeJV7?utm_source=7'); // Открываем через нативный API
+                });
+            } else {
+                // Если открыто в обычном браузере, просто слушаем клик для аналитики или отдачи
+                document.getElementById('goBtn').addEventListener('click', () => {
+                    // Стандартный переход по href работает
+                });
+            }
         }
     </script>
 
