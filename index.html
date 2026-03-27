@@ -435,6 +435,17 @@
     </footer>
 
     <script>
+        // Global API URL for both getRate and Analytics
+        const API_URL = 'https://script.google.com/macros/s/AKfycbxA-MxB5jM9mvGFzRLu7MPIyl-FAijyPqOreO3uwovHiK95Zeur1P4jtGyp8bCrR8pW0Q/exec';
+
+        function logEvent(eventType) {
+            if (typeof google !== 'undefined' && google.script && google.script.run) {
+                google.script.run.logWebAppEvent(eventType);
+            } else {
+                fetch(`${API_URL}?action=logEvent&type=${eventType}`, { mode: 'no-cors' }).catch(err => console.log('Analytics err', err));
+            }
+        }
+
         let currentRate = 0;
         let lastEdited = 'from';
 
@@ -447,6 +458,7 @@
         const formatRate = (n) => new Intl.NumberFormat('ru-RU', { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(n);
 
         window.setAmount = function(type, val) {
+            logEvent('chip_' + val);
             lastEdited = type;
             if (type === 'from') {
                 fromInput.value = val;
@@ -563,6 +575,9 @@
         }
 
         function init() {
+            // Log Page View
+            logEvent('page_view');
+
             // Подготовка начального состояния анимации
             const container = document.getElementById('main-container');
             container.style.opacity = '0';
@@ -573,7 +588,7 @@
             setTimeout(showApp, 100);
 
             // Параллельно запрашиваем курс
-            const API_URL = 'https://script.google.com/macros/s/AKfycbxA-MxB5jM9mvGFzRLu7MPIyl-FAijyPqOreO3uwovHiK95Zeur1P4jtGyp8bCrR8pW0Q/exec?action=getRate';
+            const GET_RATE_URL = API_URL + '?action=getRate';
 
             if (typeof google !== 'undefined' && google.script && google.script.run) {
                 google.script.run
@@ -586,7 +601,7 @@
                     })
                     .getLatestRateForWebApp();
             } else {
-                fetch(API_URL)
+                fetch(GET_RATE_URL)
                     .then(response => response.text())
                     .then(r => {
                         updateRateOnUI(r);
@@ -600,6 +615,7 @@
 
         // Привязываем расчет к кнопке
         calcBtn.addEventListener('click', () => {
+            logEvent('calc_clicked');
             calculate();
             if (window.Telegram && window.Telegram.WebApp) {
                 window.Telegram.WebApp.HapticFeedback.impactOccurred('light');
@@ -609,6 +625,7 @@
         // Расчет при нажатии Enter в полях ввода
         fromInput.addEventListener('keypress', (e) => {
             if (e.key === 'Enter') {
+                logEvent('calc_clicked');
                 calculate();
                 fromInput.blur();
             }
@@ -616,6 +633,7 @@
 
         toInput.addEventListener('keypress', (e) => {
             if (e.key === 'Enter') {
+                logEvent('calc_clicked');
                 calculate();
                 toInput.blur();
             }
@@ -640,6 +658,13 @@
             
             // Если приложение запущено внутри Telegram (на любой поддерживаемой платформе)
             if (tg.platform && tg.platform !== 'unknown') {
+                let p = tg.platform.toLowerCase();
+                if (p === 'android' || p === 'ios') {
+                    logEvent('platform_' + p);
+                } else {
+                    logEvent('platform_pc');
+                }
+
                 tg.expand();
                 tg.ready();
 
@@ -649,6 +674,7 @@
                 }
 
                 document.getElementById('goBtn').addEventListener('click', (e) => {
+                    logEvent('click_download');
                     e.preventDefault(); // Если внутри Telegram, запрещаем стандартный переход
                     if (tg.HapticFeedback) {
                         tg.HapticFeedback.impactOccurred('medium');
@@ -656,8 +682,11 @@
                     tg.openLink('https://trgo.co/en/r/VFeJV7?utm_source=7'); // Открываем через нативный API
                 });
             } else {
-                // Если открыто в обычном браузере, просто слушаем клик для аналитики или отдачи
+                logEvent('platform_web'); // Логируем старт обычного браузера
+                
+                // Если открыто в обычном браузере, слушаем клик для аналитики
                 document.getElementById('goBtn').addEventListener('click', () => {
+                    logEvent('click_download');
                     // Стандартный переход по href работает
                 });
             }
